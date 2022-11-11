@@ -5,30 +5,26 @@ let inputSearch = document.getElementById('search')
 const buttonSearch = document.getElementById('buttonSearch')
 const setArray = new Set(events.map( property => property.category ))
 const arrayCategory = Array.from(setArray)
-let filtrado = []
 
 // EventListener
 spaceCheck.addEventListener('change', e => {
-    const checked = Array.from(document.querySelectorAll('input[type = "checkbox"]:checked')).map( input => input.value )
-    const cardsFilters = filterCategory(events, checked)
-    filtrado = cardsFilters.map( e => e)
-    printCards(cardsFilters)
+    let filtro = filtrado()
+    printCards(filtro)
 })
 
 buttonSearch.addEventListener('click', e => {
     e.preventDefault()
-    filtrado = valorFiltrado()
-    let text = inputSearch.value.toLowerCase().trim()
-    const cardsTextFilters = filterText(filtrado, text)
-    printCards(cardsTextFilters)
+    let filtro = filtrado()
+    printCards(filtro)
 })
 
 // Funciones
-function valorFiltrado() {
-    if(filtrado.length === 0) {
-        return events
-    }
-    return filtrado
+function filtrado() {
+    const checked = Array.from(document.querySelectorAll('input[type = "checkbox"]:checked')).map( input => input.value )
+    const cardsFilters = filterCategory(events, checked)
+    let text = inputSearch.value.toLowerCase().trim()
+    const cardsTextFilters = filterText(cardsFilters, text)
+    return cardsTextFilters
 }
 
 printCards(events)
@@ -65,7 +61,7 @@ function createCheckbox(value, contenedor) {
 }
 
 function filterCategory(event, condition) {
-    let filters = event.filter(evento => condition.includes(evento.category))
+    const filters = event.filter(evento => condition.includes(evento.category))
     return filters
 }
 
