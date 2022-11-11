@@ -3,36 +3,51 @@ const cardUpcoming = document.getElementById('cards-upcoming')
 const spaceCheck = document.getElementById('category')
 let inputSearch = document.getElementById('search')
 const buttonSearch = document.getElementById('buttonSearch')
-const setArray = new Set(events.map( property => property.category ))
-const arrayCategory = Array.from(setArray)
+let eventsData
+let data
+let date
+
+// Peticion
+fetch("https://amazing-events.herokuapp.com/api/events")
+    .then(response => response.json())
+    .then(json => {
+        eventsData = json
+        data = eventsData.events
+        date = eventsData.currentDate
+        printCards(data, date)
+        const setArray = new Set(data.map( property => property.category ))
+        const arrayCategory = Array.from(setArray)
+        createCheckbox(arrayCategory, spaceCheck)
+    })
+    .catch(error => console.error(error))
+
 
 // EventListener
 spaceCheck.addEventListener('change', e => {
     let filtro = filtrado()
-    printCards(filtro)
+    printCards(filtro, date)
 })
 
 buttonSearch.addEventListener('click', e => {
     e.preventDefault()
     let filtro = filtrado()
-    printCards(filtro)
+    printCards(filtro, date)
 })
 
 // Funciones
 function filtrado() {
     const checked = Array.from(document.querySelectorAll('input[type = "checkbox"]:checked')).map( input => input.value )
-    const cardsFilters = filterCategory(events, checked)
+    const cardsFilters = filterCategory(data, checked)
     let text = inputSearch.value.toLowerCase().trim()
     const cardsTextFilters = filterText(cardsFilters, text)
     return cardsTextFilters
 }
 
-printCards(events)
-function printCards(event){
+function printCards(event, dateFetch){
     limpiarHTML()
     event.map(property =>  {
     const {image, name, description, price, date, _id} = property
-    if(date > currentDate ) {
+    if(date > dateFetch ) {
         let infoCards = document.createElement('div')
         infoCards.classList.add('card', 'card-width', 'me-auto', 'ms-auto', 'd-block', 'mb-4', 'bg-dark')
         infoCards.innerHTML = `
@@ -51,7 +66,6 @@ function printCards(event){
     })
 }
 
-createCheckbox(arrayCategory, spaceCheck)
 function createCheckbox(value, contenedor) {
     let template = ''
     value.forEach( values => template += `
