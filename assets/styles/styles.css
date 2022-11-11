@@ -129,7 +129,7 @@ table, td, td {
         height: 10vh;
     }
     main {
-        height: 190vh;
+        height: auto;
     }
     .cards-home {
         height: auto;
@@ -141,7 +141,7 @@ table, td, td {
         height: 80vh;
     }
     footer {
-        height: 10vh !important;
+        height: 18vh !important;
     }
     .height-information {
         display: flex;
