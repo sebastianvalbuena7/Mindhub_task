@@ -1,7 +1,5 @@
 const info = events
-
-const queryString = location.search
-const params = new URLSearchParams(queryString)
+const params = new URLSearchParams(location.search)
 const id = params.get('id')
 const card = info.find(card => card._id === id)
 
@@ -17,7 +15,7 @@ div.innerHTML = `
             <p class="fs-5 px-3">${card.description}</p>
             <p class="fs-5 px-3">Place: ${card.place}</p>
             <p class="fs-5 px-3">Capacity: ${card.capacity}</p>
-            <p class="fs-5 px-3">Assistance: ${card.assistance}</p>
+            <p class="fs-5 px-3">Assistance: ${card.assistance ? card.assistance : card.estimate}</p>
         </div>
     </div>
 `
