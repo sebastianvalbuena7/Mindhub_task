@@ -3,8 +3,21 @@ const cardHome = document.getElementById('article-cards')
 const spaceCheck = document.getElementById('category')
 let inputSearch = document.getElementById('search')
 const buttonSearch = document.getElementById('buttonSearch')
-const setArray = new Set(events.map( property => property.category ))
-const arrayCategory = Array.from(setArray)
+let eventsData
+let data
+
+// Peticion
+fetch("https://amazing-events.herokuapp.com/api/events")
+    .then(response => response.json())
+    .then(json => {
+        eventsData = json
+        data = eventsData.events
+        printCards(data)
+        const setArray = new Set(data.map( property => property.category ))
+        const arrayCategory = Array.from(setArray)
+        createCheckbox(arrayCategory, spaceCheck)
+    })
+    .catch(error => console.error(error))
 
 // EventListener
 spaceCheck.addEventListener('change', e => {
@@ -21,13 +34,12 @@ buttonSearch.addEventListener('click', e => {
 // Funciones
 function filtrado() {
     const checked = Array.from(document.querySelectorAll('input[type = "checkbox"]:checked')).map( input => input.value )
-    const cardsFilters = filterCategory(events, checked)
+    const cardsFilters = filterCategory(data, checked)
     let text = inputSearch.value.toLowerCase().trim()
     const cardsTextFilters = filterText(cardsFilters, text)
     return cardsTextFilters
 }
 
-printCards(events)
 function printCards(event) {
     limpiarHTML()
     event.map(property =>  {
@@ -49,7 +61,6 @@ function printCards(event) {
     })
 }
 
-createCheckbox(arrayCategory, spaceCheck)
 function createCheckbox(value, contenedor) {
     let template = ''
     value.forEach( values => template += `
