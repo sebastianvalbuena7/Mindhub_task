@@ -2,6 +2,7 @@
 const trHighest = document.getElementById('tr-highest')
 const trCategoryUpcoming = document.getElementById('tr-categoryUpcoming')
 const trCategoryUpcomingRevenues = document.getElementById('tr-categoryUpcomingRevenues')
+const trCategoryUpcomingAttendance = document.getElementById('tr-categoryUpcomingAttendance')
 let eventsData
 let data
 let date
@@ -83,16 +84,20 @@ function createUpcoming(events, fetchDate) {
     const totalResult = category.map(totalResult => (
     {
         category: totalResult,
-        price: resultTemp[totalResult]
+        price: resultTemp[totalResult],
+        assistance: resultTemp[totalResult]
     }
     ))
 
     totalResult.map(property => {
         let infoTd = document.createElement('tr')
         let infoTd2 = document.createElement('tr')
+        let infoTd3 = document.createElement('tr')
         infoTd.textContent = `${property.price}`
         infoTd2.textContent = `${property.category}`
-        trCategoryUpcoming.appendChild(infoTd2)
+        infoTd3.textContent = `${property.assistance}`
         trCategoryUpcomingRevenues.appendChild(infoTd)
+        trCategoryUpcoming.appendChild(infoTd2)
+        trCategoryUpcomingAttendance.appendChild(infoTd3)
     })
 }
