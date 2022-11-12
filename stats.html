@@ -46,7 +46,7 @@
             <h1 class="text-center">Stats</h1>
         </div>
 
-        <table class="table table-dark table-width mb-2 my-2 w-25 m-auto">
+        <table class="table table-dark table-responsive table-width mt-5 my-2 w-25 m-auto">
             <tbody>
                 <tr>
                     <td colspan="3">Events Statistics</td>
@@ -57,39 +57,29 @@
                     <td class="table-secondary">Event with larger capacity</td>
                 </tr>
 
-                <tr>
-                    <td class="table-secondary">&nbsp;</td>
-                    <td class="table-secondary"></td>
-                    <td class="table-secondary"></td>
+                <tr id="tr-highest">
                 </tr>
+            </tbody>
                 
                 <tr>
                     <td colspan="3">Upcoming events statistics by category</td>
                 </tr>
-
+            
                 <tr>
                     <td class="table-secondary">Categories</td>
                     <td class="table-secondary">Revenues</td>
                     <td class="table-secondary">Percentage of attendance</td>
                 </tr>
-
-                <tr>
-                    <td class="table-secondary">&nbsp;</td>
-                    <td class="table-secondary"></td>
-                    <td class="table-secondary"></td>
-                </tr>
-
-                <tr>
-                    <td class="table-secondary">&nbsp;</td>
-                    <td class="table-secondary"></td>
-                    <td class="table-secondary"></td>
-                </tr>
-
-                <tr>
-                    <td class="table-secondary">&nbsp;</td>
-                    <td class="table-secondary"></td>
-                    <td class="table-secondary"></td>
-                </tr>
+                <tbody>
+                    <tr>
+                        <td class="table-secondary" id="tr-categoryUpcoming"></td>
+                        <td class="table-secondary" id="tr-categoryUpcomingRevenues"></td>
+                    </tr>
+                    <tr id="tr-categoryUpcoming">
+                    </tr>
+                    <tr id="tr-categoryUpcomingRevenues">
+                    </tr>
+                </tbody>
 
                 <tr>
                     <td colspan="3">Past Events statistics by category</td>
