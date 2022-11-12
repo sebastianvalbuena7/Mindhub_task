@@ -64,7 +64,6 @@ function printCards(event, dateFetch) {
     })
 }
 
-createCheckbox(arrayCategory, spaceCheck)
 function createCheckbox(value, contenedor) {
     let template = ''
     value.forEach( values => template += `
