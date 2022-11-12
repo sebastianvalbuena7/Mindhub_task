@@ -74,6 +74,7 @@ function createUpcoming(events, fetchDate) {
     // Resultados temporales
     const resultTemp = {}
     const resultTemp2 = {}
+    const resultTemp3 = {}
     // Calcular totales
     events.map(property => {
         if(property.date > fetchDate) {
@@ -81,27 +82,30 @@ function createUpcoming(events, fetchDate) {
             resultTemp[property.category] = partialResult ? partialResult + property.price : property.price
             const partialResult2 = resultTemp2[property.category]
             resultTemp2[property.category] = partialResult2 ? partialResult2 + parseInt(property.estimate) : parseInt(property.estimate)
+            const partialResult3 = resultTemp3[property.category]
+            resultTemp3[property.category] = partialResult3 ? partialResult3 + parseInt(property.capacity) : parseInt(property.capacity)
         }
     })
-    renderUpcoming(resultTemp, resultTemp2)
+    renderUpcoming(resultTemp, resultTemp2, resultTemp3)
 }
 
-function renderUpcoming(resultTemp, resultTemp2) {
+function renderUpcoming(resultTemp, resultTemp2, resultTemp3) {
     const totals = Object
     // Guarda las categorias
-    const category = totals.keys(resultTemp, resultTemp2)
+    const category = totals.keys(resultTemp, resultTemp2, resultTemp3)
     const totalResult = category.map(totalResult => (
     {
         category: totalResult,
         price: resultTemp[totalResult],
-        estimate: resultTemp2[totalResult]
+        estimate: resultTemp2[totalResult],
+        capacity: resultTemp3[totalResult]
     }))
 
     totalResult.map(property => {
         let infoTd = document.createElement('tr'), infoTd2 = document.createElement('tr'), infoTd3 = document.createElement('tr')
         infoTd.textContent = `${property.category}`
-        infoTd2.textContent = `${property.price}`
-        infoTd3.textContent = `${property.estimate}`
+        infoTd2.textContent = `$ ${property.price * property.estimate}`
+        infoTd3.textContent = `${Math.trunc(property.estimate * 100 / property.capacity)}%`
         trCategoryUpcoming.appendChild(infoTd)
         trCategoryUpcomingRevenues.appendChild(infoTd2)
         trCategoryUpcomingAttendance.appendChild(infoTd3)
@@ -112,6 +116,7 @@ function createPast(events, fetchDate) {
     // Resultados temporales
     const resultTemp = {}
     const resultTemp2 = {}
+    const resultTemp3 = {}
     // Calcular totales
     events.map(property => {
         if(property.date < fetchDate) {
@@ -119,12 +124,14 @@ function createPast(events, fetchDate) {
             resultTemp[property.category] = partialResult ? partialResult + property.price : property.price
             const partialResult2 = resultTemp2[property.category]
             resultTemp2[property.category] = partialResult2 ? partialResult2 + parseInt(property.assistance) : parseInt(property.assistance)
+            const partialResult3 = resultTemp3[property.category]
+            resultTemp3[property.category] = partialResult3 ? partialResult3 + parseInt(property.capacity) : parseInt(property.capacity)
         }
     })
-    renderPast(resultTemp, resultTemp2)
+    renderPast(resultTemp, resultTemp2, resultTemp3)
 }
 
-function renderPast(resultTemp, resultTemp2) {
+function renderPast(resultTemp, resultTemp2, resultTemp3) {
     const totals = Object
     // Guarda las categorias
     const category = totals.keys(resultTemp, resultTemp2)
@@ -132,14 +139,15 @@ function renderPast(resultTemp, resultTemp2) {
     {
         category: totalResult,
         price: resultTemp[totalResult],
-        assistance: resultTemp2[totalResult]
+        assistance: resultTemp2[totalResult],
+        capacity: resultTemp3[totalResult]
     }))
 
     totalResult.map(property => {
         let infoTd = document.createElement('tr'), infoTd2 = document.createElement('tr'), infoTd3 = document.createElement('tr')
         infoTd.textContent = `${property.category}`
-        infoTd2.textContent = `${property.price}`
-        infoTd3.textContent = `${property.assistance}`
+        infoTd2.textContent = `$ ${property.price * property.assistance}`
+        infoTd3.textContent = `${Math.trunc(property.assistance * 100 / property.capacity)}%`
         trCategoryPast.appendChild(infoTd)
         trCategoryPastRevenues.appendChild(infoTd2)
         trCategoryPastAttendance.appendChild(infoTd3)
