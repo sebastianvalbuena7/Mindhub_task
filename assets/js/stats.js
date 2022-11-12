@@ -17,10 +17,8 @@ fetch("https://amazing-events.herokuapp.com/api/events")
         lowestAttendance(data)
         largerCapacity(data)
         const setArray = new Set(data.map( property => property))
-        const setArray2 = new Set(data.map(property => property.category))
         const arrayCategory = Array.from(setArray).filter(value => value.category !== "Food Fair")
-        const arrayCategory2 = Array.from(setArray2).filter(value => value !== "Food Fair")
-        createUpcoming(arrayCategory, arrayCategory2, date)
+        createUpcoming(arrayCategory, date)
     })
     .catch(error => console.error(error))
 
@@ -66,18 +64,12 @@ function printInfo(event) {
     })
 }
 
-function createUpcoming(value1, value2, fetchDate) {
-    value2.map(property => {
-        let infoTd = document.createElement('tr')
-        infoTd.textContent = `${property}`
-        trCategoryUpcoming.appendChild(infoTd)
-    })
-
+function createUpcoming(events, fetchDate) {
     // Resultados temporales
     const resultTemp = {}
   
     // Calcular totales
-    value1.map(property => {
+    events.map(property => {
         if(property.date > fetchDate) {
             const partialResult = resultTemp[property.category]
             resultTemp[property.category] = partialResult ? partialResult + property.price : property.price
@@ -97,7 +89,10 @@ function createUpcoming(value1, value2, fetchDate) {
 
     totalResult.map(property => {
         let infoTd = document.createElement('tr')
+        let infoTd2 = document.createElement('tr')
         infoTd.textContent = `${property.price}`
+        infoTd2.textContent = `${property.category}`
+        trCategoryUpcoming.appendChild(infoTd2)
         trCategoryUpcomingRevenues.appendChild(infoTd)
     })
 }
