@@ -68,6 +68,7 @@ function printInfo(event) {
 function createUpcoming(events, fetchDate) {
     // Resultados temporales
     const resultTemp = {}
+    const resultTemp2 = {}
   
     // Calcular totales
     events.map(property => {
@@ -77,27 +78,44 @@ function createUpcoming(events, fetchDate) {
         }
     })
 
-    // Pasamos los resultados al formato array indicado
+    events.map(property => {
+        if(property.date > fetchDate) {
+            const partialResult = resultTemp2[property.category]
+            resultTemp2[property.category] = partialResult ? partialResult + parseInt(property.estimate) : parseInt(property.estimate)
+        }
+    })
+
     const totals = Object
     // Guarda las categorias
     const category = totals.keys(resultTemp)
     const totalResult = category.map(totalResult => (
     {
         category: totalResult,
-        price: resultTemp[totalResult],
-        assistance: resultTemp[totalResult]
+        price: resultTemp[totalResult]
+    }
+    ))
+
+    const totals2 = Object
+    const assistance = totals2.keys(resultTemp2)
+    const totalResult2 = assistance.map(totalResult => (
+    {
+        category: totalResult,
+        assistance: resultTemp2[totalResult]
     }
     ))
 
     totalResult.map(property => {
         let infoTd = document.createElement('tr')
         let infoTd2 = document.createElement('tr')
-        let infoTd3 = document.createElement('tr')
         infoTd.textContent = `${property.price}`
         infoTd2.textContent = `${property.category}`
-        infoTd3.textContent = `${property.assistance}`
         trCategoryUpcomingRevenues.appendChild(infoTd)
         trCategoryUpcoming.appendChild(infoTd2)
-        trCategoryUpcomingAttendance.appendChild(infoTd3)
+    })
+
+    totalResult2.map(property => {
+        let infoTd = document.createElement('tr')
+        infoTd.textContent = `${property.assistance}`
+        trCategoryUpcomingAttendance.appendChild(infoTd)
     })
 }
