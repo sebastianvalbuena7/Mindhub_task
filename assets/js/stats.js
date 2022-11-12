@@ -3,6 +3,9 @@ const trHighest = document.getElementById('tr-highest')
 const trCategoryUpcoming = document.getElementById('tr-categoryUpcoming')
 const trCategoryUpcomingRevenues = document.getElementById('tr-categoryUpcomingRevenues')
 const trCategoryUpcomingAttendance = document.getElementById('tr-categoryUpcomingAttendance')
+const trCategoryPast = document.getElementById('tr-categoryPast')
+const trCategoryPastRevenues = document.getElementById('tr-categoryPastRevenues')
+const trCategoryPastAttendance = document.getElementById('tr-categoryPastAttendance')
 let eventsData
 let data
 let date
@@ -19,7 +22,9 @@ fetch("https://amazing-events.herokuapp.com/api/events")
         largerCapacity(data)
         const setArray = new Set(data.map( property => property))
         const arrayCategory = Array.from(setArray).filter(value => value.category !== "Food Fair")
+        const arrayCategory2 = Array.from(setArray).filter(value => value.category)
         createUpcoming(arrayCategory, date)
+        createPast(arrayCategory2, date)
     })
     .catch(error => console.error(error))
 
@@ -69,53 +74,74 @@ function createUpcoming(events, fetchDate) {
     // Resultados temporales
     const resultTemp = {}
     const resultTemp2 = {}
-  
     // Calcular totales
     events.map(property => {
         if(property.date > fetchDate) {
             const partialResult = resultTemp[property.category]
             resultTemp[property.category] = partialResult ? partialResult + property.price : property.price
+            const partialResult2 = resultTemp2[property.category]
+            resultTemp2[property.category] = partialResult2 ? partialResult2 + parseInt(property.estimate) : parseInt(property.estimate)
         }
     })
+    renderUpcoming(resultTemp, resultTemp2)
+}
 
-    events.map(property => {
-        if(property.date > fetchDate) {
-            const partialResult = resultTemp2[property.category]
-            resultTemp2[property.category] = partialResult ? partialResult + parseInt(property.estimate) : parseInt(property.estimate)
-        }
-    })
-
+function renderUpcoming(resultTemp, resultTemp2) {
     const totals = Object
     // Guarda las categorias
-    const category = totals.keys(resultTemp)
+    const category = totals.keys(resultTemp, resultTemp2)
     const totalResult = category.map(totalResult => (
     {
         category: totalResult,
-        price: resultTemp[totalResult]
-    }
-    ))
-
-    const totals2 = Object
-    const assistance = totals2.keys(resultTemp2)
-    const totalResult2 = assistance.map(totalResult => (
-    {
-        category: totalResult,
-        assistance: resultTemp2[totalResult]
-    }
-    ))
+        price: resultTemp[totalResult],
+        estimate: resultTemp2[totalResult]
+    }))
 
     totalResult.map(property => {
-        let infoTd = document.createElement('tr')
-        let infoTd2 = document.createElement('tr')
-        infoTd.textContent = `${property.price}`
-        infoTd2.textContent = `${property.category}`
-        trCategoryUpcomingRevenues.appendChild(infoTd)
-        trCategoryUpcoming.appendChild(infoTd2)
+        let infoTd = document.createElement('tr'), infoTd2 = document.createElement('tr'), infoTd3 = document.createElement('tr')
+        infoTd.textContent = `${property.category}`
+        infoTd2.textContent = `${property.price}`
+        infoTd3.textContent = `${property.estimate}`
+        trCategoryUpcoming.appendChild(infoTd)
+        trCategoryUpcomingRevenues.appendChild(infoTd2)
+        trCategoryUpcomingAttendance.appendChild(infoTd3)
     })
+}
 
-    totalResult2.map(property => {
-        let infoTd = document.createElement('tr')
-        infoTd.textContent = `${property.assistance}`
-        trCategoryUpcomingAttendance.appendChild(infoTd)
+function createPast(events, fetchDate) {
+    // Resultados temporales
+    const resultTemp = {}
+    const resultTemp2 = {}
+    // Calcular totales
+    events.map(property => {
+        if(property.date < fetchDate) {
+            const partialResult = resultTemp[property.category]
+            resultTemp[property.category] = partialResult ? partialResult + property.price : property.price
+            const partialResult2 = resultTemp2[property.category]
+            resultTemp2[property.category] = partialResult2 ? partialResult2 + parseInt(property.assistance) : parseInt(property.assistance)
+        }
+    })
+    renderPast(resultTemp, resultTemp2)
+}
+
+function renderPast(resultTemp, resultTemp2) {
+    const totals = Object
+    // Guarda las categorias
+    const category = totals.keys(resultTemp, resultTemp2)
+    const totalResult = category.map(totalResult => (
+    {
+        category: totalResult,
+        price: resultTemp[totalResult],
+        assistance: resultTemp2[totalResult]
+    }))
+
+    totalResult.map(property => {
+        let infoTd = document.createElement('tr'), infoTd2 = document.createElement('tr'), infoTd3 = document.createElement('tr')
+        infoTd.textContent = `${property.category}`
+        infoTd2.textContent = `${property.price}`
+        infoTd3.textContent = `${property.assistance}`
+        trCategoryPast.appendChild(infoTd)
+        trCategoryPastRevenues.appendChild(infoTd2)
+        trCategoryPastAttendance.appendChild(infoTd3)
     })
 }
