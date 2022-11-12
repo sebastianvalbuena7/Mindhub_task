@@ -30,22 +30,46 @@ fetch("https://amazing-events.herokuapp.com/api/events")
 
 // Funciones 
 function highestAttendance(events) {
-    let filterAssistance = events.filter(property => property.assistance)
-    let highAttendance = filterAssistance.map(property => parseInt(property.assistance))
-    const maxValue = highAttendance.reduce((previous, current) => {
-        return Math.max(previous, current)
-    }, 0)
-    const compareData = events.filter(property => parseInt(property.assistance) == maxValue)
+    let array = []
+    let filterAssistance = events.filter(property => property.assistance).map(property => {
+        array = {
+            name: property.name,
+            assistance: parseInt(property.assistance),
+            capacity: parseInt(property.capacity)
+        }
+        return array
+    })
+    const operation = filterAssistance.map(elem => {
+        array = {
+            name: elem.name,
+            value:  Math.trunc(elem.assistance * 100 / elem.capacity)
+        }
+        return array
+    })
+    const accessValue = operation.filter(property => property.value).map(property => property.value).reduce((a,b) => Math.max(a, b))
+    const compareData = operation.filter(property => property.value == accessValue)
     printInfo(compareData)
 }
 
 function lowestAttendance(events) {
-    let filterAssistance = events.filter(property => property.assistance)
-    let lowAttendance = filterAssistance.map(property => parseInt(property.assistance))
-    const minValue = lowAttendance.reduce((previous, current) => {
-        return Math.min(previous, current)
+    let array = []
+    let filterAssistance = events.filter(property => property.assistance).map(property => {
+        array = {
+            name: property.name,
+            assistance: parseInt(property.assistance),
+            capacity: parseInt(property.capacity)
+        }
+        return array
     })
-    const compareData = events.filter(property => parseInt(property.assistance) == minValue)
+    const operation = filterAssistance.map(elem => {
+        array = {
+            name: elem.name,
+            value:  Math.trunc(elem.assistance * 100 / elem.capacity)
+        }
+        return array
+    })
+    const accessValue = operation.filter(property => property.value).map(property => property.value).reduce((a,b) => Math.min(a, b))
+    const compareData = operation.filter(property => property.value == accessValue)
     printInfo(compareData)
 }
 
