@@ -53,7 +53,7 @@ table, td, td {
 }
 
 .height-contact {
-    height: 130vh;
+    height: 155vh;
 }
 
 .main-information {
@@ -138,7 +138,7 @@ table, td, td {
         height: auto;
     }
     .height-contact {
-        height: 85vh;
+        height: 110vh;
     }
     footer {
         height: 18vh !important;
