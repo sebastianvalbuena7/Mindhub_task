@@ -11,6 +11,7 @@ const trCategoryPastAttendance = document.getElementById('tr-categoryPastAttenda
 let pastEvents
 let upcomingEvents
 let upcomingCategories
+let pastCategories
 let eventsData
 let data
 let date
@@ -23,9 +24,11 @@ fetch("https://amazing-events.herokuapp.com/api/events")
         data = eventsData.events
         date = eventsData.currentDate
 
+        // Eventos segun la fecha
         pastEvents = data.filter(event => event.date < eventsData.currentDate)
         upcomingEvents = data.filter(event => event.date > eventsData.currentDate)
 
+        // Filtrar categorias
         upcomingCategories = Array.from(new Set(upcomingEvents.map(event => event.category)))
         pastCategories = Array.from(new Set(pastEvents.map(event => event.category)))
 
@@ -35,7 +38,7 @@ fetch("https://amazing-events.herokuapp.com/api/events")
         createUpcoming(upcomingCategories, upcomingEvents)
         createPast(pastCategories, pastEvents)
     })
-    // .catch(error => console.error(error))
+    .catch(error => console.error(error))
 
 // Funciones 
 function highestAttendance(events) {
@@ -106,10 +109,13 @@ function printInfo(event) {
 function createUpcoming(categories, events) {
     let array = []
     categories.forEach(property => {
+        // Variable para traer los eventos segun la cateogria
         let eventsCategory = events.filter(event => event.category === property)
         
+        // Saca el porcentaje de cada uno de los eventos
         let porcentaje = eventsCategory.map(event => (event.estimate * 100 / event.capacity))
-
+        
+        // Suma todos los porcentajes de cada uno de los eventos por categorias
         let totals = porcentaje.reduce((a, b) => a + b)
         let averageAssistance = totals/porcentaje.length
         
@@ -127,12 +133,12 @@ function createUpcoming(categories, events) {
 
 function renderUpcoming(events) {
     let template = ''
-    events.forEach((event, index) => {
+    events.forEach(event => {
         template += `
         <tr>
-        <td class="table-secondary">${events[index].name}</td>
-        <td class="table-secondary">$${events[index].revenues}</td>
-        <td class="table-secondary">${events[index].assistance || events[index].estimate}%</td>
+        <td class="table-secondary">${event.name}</td>
+        <td class="table-secondary">$${event.revenues}</td>
+        <td class="table-secondary">${event.assistance || event.estimate}%</td>
         </tr> `
     })
     tbodyUpcoming.innerHTML = template
@@ -146,13 +152,13 @@ function createPast(categories, events) {
         let porcentaje = eventsCategory.map(event => (event.assistance * 100 / event.capacity))
 
         let totals = porcentaje.reduce((a, b) => a + b)
-        let averageAssistance = totals/porcentaje.length
+        let assistance = totals/porcentaje.length
         
         let ingresos = eventsCategory.map(event => event.assistance * event.price).reduce((a, b) => a + b)
 
         const category = {
             name: property,
-            estimate: averageAssistance.toFixed(0),
+            estimate: assistance.toFixed(0),
             revenues: ingresos
         }
         array.push(category)
@@ -162,12 +168,12 @@ function createPast(categories, events) {
 
 function renderPast(events) {
     let template = ''
-    events.forEach((event, index) => {
+    events.forEach(event => {
         template += `
         <tr>
-        <td class="table-secondary">${events[index].name}</td>
-        <td class="table-secondary">$${events[index].revenues}</td>
-        <td class="table-secondary">${events[index].assistance || events[index].estimate}%</td>
+        <td class="table-secondary">${event.name}</td>
+        <td class="table-secondary">$${event.revenues}</td>
+        <td class="table-secondary">${event.assistance || event.estimate}%</td>
         </tr> `
     })
     tbodyPast.innerHTML = template
