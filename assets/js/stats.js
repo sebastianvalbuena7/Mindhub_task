@@ -103,7 +103,7 @@ function createUpcoming(events, fetchDate) {
     events.map(property => {
         if(property.date > fetchDate) {
             const partialResult = resultTemp[property.category]
-            resultTemp[property.category] = partialResult ? partialResult + property.price : property.price
+            resultTemp[property.category] = partialResult ? partialResult + (property.price * property.estimate)  : property.price
             const partialResult2 = resultTemp2[property.category]
             resultTemp2[property.category] = partialResult2 ? partialResult2 + parseInt(property.estimate) : parseInt(property.estimate)
             const partialResult3 = resultTemp3[property.category]
@@ -128,7 +128,7 @@ function renderUpcoming(resultTemp, resultTemp2, resultTemp3) {
     totalResult.map(property => {
         let infoTd = document.createElement('tr'), infoTd2 = document.createElement('tr'), infoTd3 = document.createElement('tr')
         infoTd.textContent = `${property.category}`
-        infoTd2.textContent = `$ ${property.price * property.estimate}`
+        infoTd2.textContent = `$ ${property.price}`
         infoTd3.textContent = `${Math.trunc(property.estimate * 100 / property.capacity)}%`
         trCategoryUpcoming.appendChild(infoTd)
         trCategoryUpcomingRevenues.appendChild(infoTd2)
@@ -145,7 +145,7 @@ function createPast(events, fetchDate) {
     events.map(property => {
         if(property.date < fetchDate) {
             const partialResult = resultTemp[property.category]
-            resultTemp[property.category] = partialResult ? partialResult + property.price : property.price
+            resultTemp[property.category] = partialResult ? partialResult + (property.price * property.assistance)  : property.price
             const partialResult2 = resultTemp2[property.category]
             resultTemp2[property.category] = partialResult2 ? partialResult2 + parseInt(property.assistance) : parseInt(property.assistance)
             const partialResult3 = resultTemp3[property.category]
@@ -158,7 +158,7 @@ function createPast(events, fetchDate) {
 function renderPast(resultTemp, resultTemp2, resultTemp3) {
     const totals = Object
     // Guarda las categorias
-    const category = totals.keys(resultTemp, resultTemp2)
+    const category = totals.keys(resultTemp, resultTemp2, resultTemp3)
     const totalResult = category.map(totalResult => (
     {
         category: totalResult,
@@ -170,7 +170,7 @@ function renderPast(resultTemp, resultTemp2, resultTemp3) {
     totalResult.map(property => {
         let infoTd = document.createElement('tr'), infoTd2 = document.createElement('tr'), infoTd3 = document.createElement('tr')
         infoTd.textContent = `${property.category}`
-        infoTd2.textContent = `$ ${property.price * property.assistance}`
+        infoTd2.textContent = `$ ${property.price}`
         infoTd3.textContent = `${Math.trunc(property.assistance * 100 / property.capacity)}%`
         trCategoryPast.appendChild(infoTd)
         trCategoryPastRevenues.appendChild(infoTd2)
